@@ -1,0 +1,6 @@
+typings
+node_modules
+src/config/prod.*
+src/config/dev.*
+src/**/*.js
+src/**/*.map

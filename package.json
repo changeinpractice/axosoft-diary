@@ -1,0 +1,21 @@
+{
+  "name": "axosoft-diary",
+  "version": "0.1.0",
+  "description": "Copy Axosoft tasks to incidents for date",
+  "main": "indexjs",
+  "scripts": {
+    "start": "tsc && node src/bin/index.js",
+    "postinstall": "typings install",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w"
+  },
+  "dependencies": {
+    "moment": "^2.11.2",
+    "request-promise": "^2.0.1"
+  },
+  "devDependencies": {
+    "tslint": "^3.11.0",
+    "typescript": "^1.8.10",
+    "typings": "^1.0.5"
+  }
+}
