@@ -9,7 +9,7 @@ import * as rp from "request-promise";
  * Description of the interface.
  * @interface
  */
-export interface IDiary {
+export interface Diary {
   apiUri: string;
   apiToken: string;
   apiProjectId: number;
@@ -20,11 +20,11 @@ export interface IDiary {
 }
 
 /**
-   * Description of the class.
-   * @class
-   */
-export class Diary implements IDiary {
-
+ * Description of the class.
+ * @class
+ * @public
+ */
+export class Diary implements Diary {
   public apiUri: string;
   public apiToken: string;
   public apiProjectId: number;
@@ -36,9 +36,10 @@ export class Diary implements IDiary {
   /**
    * Description of the contructor.
    * @constructor
-   * @param {object} config Description of the constructor argument.
+   * @param {object} config Description of the constructor argument
+   * @public
    */
-  constructor(config: IDiary) {
+  constructor(config: Diary) {
     this.apiUri = config.apiUri;
     this.apiToken = config.apiToken;
     this.apiProjectId = config.apiProjectId;
@@ -53,14 +54,14 @@ export class Diary implements IDiary {
    * @method
    * @public
    */
-  public run(date: any): void {
-    this._handleSuccess(`Retrieving tasks...`)
-    this._getTasks(date)
+  run(date: any): void {
+    this.handleSuccess(`Retrieving tasks...`);
+    this.getTasks(date)
       .then(tasks => {
         // resolve array of promise returning functions
-        tasks.reduce((cur, task) => cur.then(() => this._postTask(task)), Promise.resolve())
-          .then(() => this._handleSuccess("Complete"))
-          .catch(err => this._handleError(err));
+        tasks.reduce((cur, task) => cur.then(() => this.postTask(task)), Promise.resolve())
+          .then(() => this.handleSuccess("Complete"))
+          .catch(err => this.handleError(err));
       });
   }
 
@@ -69,7 +70,7 @@ export class Diary implements IDiary {
    * @method
    * @private
    */
-  private _getTasks(date: any): Promise<any> {
+  private getTasks(date: any): Promise<any> {
     const options = {
       "method": "GET",
       "uri": `${this.apiUri}/tasks`,
@@ -92,10 +93,10 @@ export class Diary implements IDiary {
           }
         });
 
-        this._handleSuccess(`Processing ${tasksForDate.length}/${tasks.data.length} tasks`)
+        this.handleSuccess(`Processing ${tasksForDate.length}/${tasks.data.length} tasks`);
         return tasksForDate;
       })
-      .catch(err => this._handleError(err));
+      .catch(err => this.handleError(err));
   }
 
   /**
@@ -104,7 +105,7 @@ export class Diary implements IDiary {
    * @param {object} task Description of the method argument.
    * @private
    */
-  private _postTask(task: any): Promise<any> {
+  private postTask(task: any): Promise<any> {
     const options = {
       "method": "POST",
       "uri": `${this.apiUri}/incidents`,
@@ -129,10 +130,10 @@ export class Diary implements IDiary {
 
     return rp(options)
       .then(res => {
-        this._handleSuccess(`- ${res.data.name}`)
+        this.handleSuccess(`- ${res.data.name}`);
         return res;
       })
-      .catch(err => this._handleError(err));
+      .catch(err => this.handleError(err));
   }
 
   /**
@@ -141,7 +142,7 @@ export class Diary implements IDiary {
    * @param {any} error Description of the method argument.
    * @private
    */
-  private _handleError(msg: any): void {
+  private handleError(msg: any): void {
     console.log(msg);
   }
 
@@ -151,7 +152,7 @@ export class Diary implements IDiary {
    * @param {any} success Description of the method argument.
    * @private
    */
-  private _handleSuccess(msg: any): void {
+  private handleSuccess(msg: any): void {
     console.log(msg);
   }
 
